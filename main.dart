@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/color.dart';
+
 import 'color.dart';
 
 void main() {
@@ -51,6 +51,9 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  final _controller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool _isPrimitivenumber = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,10 +81,45 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: _incrementCounter,
               child: const Icon(Icons.add),
-            )
+            ),
+            TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                  labelText: "Number",
+                  helperText:
+                      _isPrimitivenumber ? 'Primitive' : 'Not Primitive'),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  final _number = int.tryParse(_controller.text);
+                  if (_number != null) {
+                    setState(() {
+                      if (isPrime(_number)) {
+                        _isPrimitivenumber = true;
+                      }
+                      _isPrimitivenumber = isPrime(_number);
+                    });
+                  }
+                },
+                child: Text('Check primitive'))
           ],
         ),
       ),
     );
   }
+}
+
+bool isPrime(int number) {
+  if (number == 2) {
+    return true;
+  }
+  if (number % 2 == 0) {
+    return false;
+  }
+  for (int i = 3; i * i <= number; i += 2) {
+    if (number % i == 0) {
+      return false;
+    }
+  }
+  return true;
 }
